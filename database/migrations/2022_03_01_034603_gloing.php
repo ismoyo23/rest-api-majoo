@@ -32,19 +32,7 @@ class Gloing extends Migration
             $table->integer('deleted_by')->nullable();
         });
 
-        
-
-        Schema::create('permission', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->autoIncrement();
-            $table->string('name', 255);
-            $table->string('guard_name', 255);
-            $table->timestamps();
-           
-            $table->softDeletes();
-            $table->integer('created_by');
-            $table->integer('updated_by');
-            $table->integer('deleted_by');
-        });
+    
 
 
         Schema::create('activities', function (Blueprint $table) {
@@ -58,7 +46,7 @@ class Gloing extends Migration
             $table->integer('updated_by');
             $table->integer('deleted_by');
 
-            $table->foreign('permission_id')->references('id')->on('permission')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('id')->references('id')->on('permissions')->onDelete('restrict')->onUpdate('cascade');
         });
 
 
