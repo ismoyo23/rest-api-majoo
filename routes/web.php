@@ -19,7 +19,7 @@ $router->group(['prefix' => 'auth'], function() use($router) {
 });
 
 
-$router->group(['prefix' => 'activities', 'middleware' => 'auth', 'middleware' => 'role:admin'], function() use($router) {
+$router->group(['prefix' => 'activities', 'middleware' => 'auth'], function() use($router) {
 
     $router->get('/', 'ActivitiesController@index');
     $router->get('/{id}', 'ActivitiesController@show');

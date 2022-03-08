@@ -7,6 +7,11 @@ use App\Models\Activities;
 
 class ActivitiesController extends Controller
 {
+
+    function __construct()
+    {
+         $this->middleware('role:admin|user');
+    }
     public function index(){
         try
         {
