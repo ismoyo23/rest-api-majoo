@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class File extends Model
+class Supliers extends Model
 {
-    protected $table = "files";
+    protected $table = 'table_suplier';
 }

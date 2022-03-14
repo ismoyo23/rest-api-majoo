@@ -7,6 +7,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class Users extends Model
 {
+
     protected $guard_name = 'web';
     use HasRoles;
 }

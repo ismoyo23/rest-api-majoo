@@ -14,49 +14,68 @@
 */
 
 $router->group(['prefix' => 'auth'], function() use($router) {
-    $router->post('/login', 'AuthController@login');
+    $router->post('/', 'AuthController@login');
     $router->post('/register', 'AuthController@register');
+    $router->get('/users', 'AuthController@user');
 });
 
 
-$router->group(['prefix' => 'activities', 'middleware' => 'auth'], function() use($router) {
 
-    $router->get('/', 'ActivitiesController@index');
-    $router->get('/{id}', 'ActivitiesController@show');
-    $router->post('/', 'ActivitiesController@create');
-    $router->put('/{id}', 'ActivitiesController@update');
-    $router->delete('/{id}', 'ActivitiesController@delete');
+$router->group(['prefix' => 'penjualan', 'middleware' => 'auth'], function() use($router) {
+
+    $router->get('/', 'PenjualanController@index');
+    $router->post('/', 'PenjualanController@create');
+    $router->get('/perProduk', 'PenjualanController@laporanPenjualan');
+
+});
+
+
+$router->group(['prefix' => 'suplier', 'middleware' => 'auth'], function() use($router) {
+
+    $router->get('/', 'SuplierController@index');
+    $router->get('/{id}', 'SuplierController@index');
+    $router->post('/', 'SuplierController@create');
+    $router->delete('/{id}', 'SuplierController@deleted');
+    $router->put('/{id}', 'SuplierController@update');
 
 });
 
 
-$router->group(['prefix' => 'permission', 'middleware' => 'auth'], function() use($router) {
 
-    $router->get('/', 'PermissionController@index');
-    $router->get('/{id}', 'PermissionController@show');
-    $router->post('/', 'PermissionController@create');
-    $router->put('/{id}', 'PermissionController@update');
-    $router->delete('/{id}', 'PermissionController@delete');
+$router->group(['prefix' => 'produk', 'middleware' => 'auth'], function() use($router) {
 
-});
-
-$router->group(['prefix' => 'usersHasActivities', 'middleware' => 'auth'], function() use($router) {
-
-    $router->get('/', 'UsersHasActivitiesController@index');
-    $router->get('/{id}', 'UsersHasActivitiesController@show');
-    $router->post('/', 'UsersHasActivitiesController@create');
-    $router->put('/{id}', 'UsersHasActivitiesController@update');
-    $router->delete('/{id}', 'UsersHasActivitiesController@delete');
+    $router->post('/{id}', 'ProdukController@update');
+    $router->get('/{id}', 'ProdukController@index');
+    $router->get('/count_produk/{id}', 'ProdukController@count_produk');
+    $router->get('/detail/{id}', 'ProdukController@show');
+    $router->post('/', 'ProdukController@create');
+    $router->delete('/{id}', 'ProdukController@deleted');
 
 });
 
-$router->group(['prefix' => 'files', 'middleware' => 'auth'], function() use($router) {
 
-    $router->get('/', 'FileController@index');
-    $router->get('/{id}', 'FileController@show');
-    $router->post('/', 'FileController@create');
-    $router->put('/{id}', 'FileController@update');
-    $router->delete('/{id}', 'FileController@delete');
+$router->group(['prefix' => 'laporanPembelianProduk', 'middleware' => 'auth'], function() use($router) {
+    $router->get('/perProduk', 'LaporanPembelianController@per_produk');
+    $router->get('/', 'LaporanPembelianController@produk');
+});
+
+
+$router->group(['prefix' => 'kategori', 'middleware' => 'auth'], function() use($router) {
+
+    $router->get('/', 'kategoriController@index');
+    $router->post('/', 'kategoriController@create');
+    $router->get('/{id}', 'kategoriController@show');
+    $router->delete('/{id}', 'kategoriController@deleted');
+
+});
+
+$router->group(['prefix' => 'pelanggan', 'middleware' => 'auth'], function() use($router) {
+
+    $router->get('/', 'PelangganController@index');
+    $router->get('/detail/{id}', 'PelangganController@show');
+    $router->post('/', 'PelangganController@create');
+    $router->put('/{id}', 'PelangganController@update');
+    $router->delete('/{id}', 'PelangganController@delete');
 
 });
 

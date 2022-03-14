@@ -18,13 +18,13 @@ class AuthController extends Controller
     }
 
         public function login(Request $request) {
-            $this->validate($request, [
-            'username'     => 'required',
+            $validate = $this->validate($request, [
+            'email'     => 'required',
             'password'  => 'required'
         ]);
 
         // Find the user by email
-        $user = Users::where('username', $request->input('username'))->first();
+        $user = Users::join('roles', 'roles.id', '=', 'users.id')->where('email', $request->input('email'))->first();
         if (!$user) {
             return response()->json([
                 'error' => 'Email does not exist.'
@@ -33,7 +33,7 @@ class AuthController extends Controller
         // Verify the password and generate the token
         if (password_verify($request->input('password'), $user->password)) {
             return response()->json(['headers' => ["process_time" => microtime(), "messages"=> "Your request has been processed successfully"],
-                'data' => ["token" => $this->jwt($user)]
+                'data' => ["token" => $this->jwt($user), "result" => $user]
             ], 200);
         }
         // Bad Request response
@@ -46,34 +46,28 @@ class AuthController extends Controller
     public function register(Request $request){
 
         $validate = $this->validate($request, [
-            'is_admin' => 'required',
-            'mobile_number' => 'required|numeric',
-            'email' => 'required',
-            'username' => 'required',
-            'auth_type' => 'required',
+            'telp' => 'required|numeric',
+            'email' => 'required|email|unique:users,email',
+         
             'password' => 'required',
-            'remember_token' => 'required',
-            'status' => 'required'
+            'alamat' => 'required',
+
 
         ]);
       
             $post = new Users();
-            $post->is_admin = $validate['is_admin'];
-            $post->mobile_number = $validate['mobile_number'];
             $post->email = $validate['email'];
-            $post->username = $validate['username'];
-            $post->auth_type = $validate['auth_type'];
             $post->password = password_hash($validate['password'], PASSWORD_DEFAULT);
-            $post->remember_token = $validate['remember_token'];
-            $post->status = $validate['status'];
-           
-            $post->deleted_by = $request->deleted_by;
-            $post->updated_by = $request->updated_by;
-            $post->created_by = $request->created_by;
-            // $role = Role::where('name', '=', strval($post->perms));
-            // var_dump($role);
+            $post->telp = $validate['telp'];
+            $post->alamat = $validate['alamat'];
             $post->syncRoles([$request->perms]);
             $post->save();
             return response()->json(['headers' => 'created account is success', 'data' => $post])->setStatusCode(201);
+    }
+
+
+    public function user(){
+        $response = Users::join('roles', 'roles.id', '=', 'users.id')->get(['roles.*', 'users.*']);
+        return response()->json(['headers' => ["process_time" => microtime(),'message' =>'process data success'], 'data' => $response])->setStatusCode(200);
     }
 }
